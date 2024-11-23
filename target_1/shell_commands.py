@@ -40,7 +40,7 @@ class Shell:
             return True
 
     def ls(self):
-                try:
+        try:
             items = os.listdir(self.current_dir)
             print("\n".join(items))
             self.logger.log("ls", items)
@@ -51,7 +51,7 @@ class Shell:
             return True
 
     def cd(self, args):
-                if not args:
+        if not args:
             print("Usage: cd <directory>")
             return True
         path = os.path.join(self.current_dir, args[0])
@@ -62,47 +62,68 @@ class Shell:
             print(f"No such directory: {args[0]}")
             self.logger.log("cd", f"No such directory: {args[0]}")
         return True
-        
+
     def du(self, path=None):
         """
         Вычисляет размер указанного каталога или файла.
         Если path не указан, используется текущий каталог.
         """
-        if path is None:
-            path = self.current_dir
-        elif isinstance(path, list):
+        # Если path — это список, проверить его содержимое
+        if isinstance(path, list):
             if len(path) > 0:
-                path = path[0]
+                path = path[0]  # Используем первый элемент
             else:
-                raise ValueError("Path cannot be an empty list")
-        elif not isinstance(path, str):
+                path = self.current_dir  # По умолчанию текущая директория
+        elif path is None:
+            path = self.current_dir  # Если path не указан
+
+        # Проверка, что path имеет корректный тип
+        if not isinstance(path, str):
             raise ValueError(f"Invalid path type: {type(path)}. Expected str.")
 
+        # Получение абсолютного пути
         abs_path = os.path.join(self.root_dir, path)
 
+        # Проверка существования пути
         if not os.path.exists(abs_path):
             result = {"error": f"Path '{path}' does not exist."}
             self.logger.log(f"du {path}", result)
+            print(result)  # Выводим ошибку в консоль
             return result
 
-        if os.path.isfile(abs_path):
-            size = os.path.getsize(abs_path)
-            result = {"size": size}
+        try:
+            # Если это файл, возвращаем его размер
+            if os.path.isfile(abs_path):
+                size = os.path.getsize(abs_path)
+                result = {"size": size}
+                self.logger.log(f"du {path}", result)
+                print(result)  # Выводим результат в консоль
+                return result
+
+            # Если это директория, вычисляем общий размер
+            total_size = 0
+            for dirpath, dirnames, filenames in os.walk(abs_path):
+                for f in filenames:
+                    try:
+                        fp = os.path.join(dirpath, f)
+                        total_size += os.path.getsize(fp)
+                    except (OSError, PermissionError) as e:
+                        # Логируем недоступные файлы, но продолжаем
+                        self.logger.log(f"Error accessing file: {fp}", {"error": str(e)})
+
+            result = {"size": total_size}
             self.logger.log(f"du {path}", result)
+            print(result)  # Выводим результат в консоль
             return result
 
-        total_size = 0
-        for dirpath, dirnames, filenames in os.walk(abs_path):
-            for f in filenames:
-                fp = os.path.join(dirpath, f)
-                total_size += os.path.getsize(fp)
+        except Exception as e:
+            result = {"error": f"An unexpected error occurred: {str(e)}"}
+            self.logger.log(f"du {path}", result)
+            print(result)  # Выводим ошибку в консоль
+            return result
 
-        result = {"size": total_size}
-        self.logger.log(f"du {path}", result)
-        return result
-        
     def mv(self, args):
-                if len(args) < 2:
+        if len(args) < 2:
             print("Usage: mv <source> <destination>")
             return True
         src, dest = args
@@ -114,7 +135,7 @@ class Shell:
             print(f"Error: {e}")
             self.logger.log("mv", str(e))
         return True
-        
+
     def whoami(self):
         user = os.getlogin()
         print(user)
