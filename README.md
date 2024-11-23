@@ -41,6 +41,12 @@ cd target_1
 python emulator.py --hostname myhost --vfs ./filesystem.zip --logfile ./session.json
 ```
 
+Или, если есть необходимый файл конфигурации (например ``startup_script.txt``), то запускаем через команду:
+
+```
+python emulator.py --hostname MyShell --vfs filesystem.zip --logfile session.json --script startup_script.txt
+```
+
 ## Команда для запуска юнит-тестов
 
 Для запуска юнит-тестов необходимо перейти из корневого каталога проекта в каталог ``target_1`` посредством команды:
