@@ -1,0 +1,4 @@
+ls
+cd subdir
+whoami
+du
