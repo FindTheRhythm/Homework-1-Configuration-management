@@ -56,10 +56,21 @@ class TestDU(unittest.TestCase):
         self.assertEqual(log_entry["command"], "du test_dir")
         self.assertEqual(log_entry["result"], {"size": 10})
 
-    def test_du_empty_list(self):
-        with self.assertRaises(ValueError) as context:
-            self.shell.du([])  # Передаем пустой список
-        self.assertEqual(str(context.exception), "Path cannot be an empty list")
+    def test_du_empty_input(self):
+        # Проверка для текущей директории
+        result = self.shell.du([])
+        expected_size = sum(
+            os.path.getsize(os.path.join(dirpath, f))
+            for dirpath, _, filenames in os.walk(self.test_dir)
+            for f in filenames
+        )
+        self.assertEqual(result, {"size": expected_size})
+
+        # Проверяем логи
+        log_entry = self.logger.logs[-1]
+        self.assertEqual(log_entry["command"], f"du .")
+        self.assertEqual(log_entry["result"], {"size": expected_size})
+
 
 if __name__ == "__main__":
     unittest.main()
