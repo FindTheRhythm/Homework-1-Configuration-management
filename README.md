@@ -71,6 +71,6 @@ pytest tests/
 
 ## Результат работы программы
 
-![]()
+![programm](https://github.com/SamurayGIF/Homework-1---Configuration-management/blob/4ec2d8a68752ca4c409fc3c39acbee58adf46694/target_1/images/Screenshot%202024-11-24%20022526.png)
 
 
