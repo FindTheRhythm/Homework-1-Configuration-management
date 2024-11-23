@@ -1,24 +1,22 @@
 import os
 import zipfile
+import tempfile
 
 
-def extract_zip(zip_path, extract_to="vfs_temp"):
+def extract_zip(zip_path):
     """
-    Распаковывает архив zip в указанную директорию.
-    Если директория уже существует, она сначала очищается.
+    Извлекает содержимое ZIP-файла во временную директорию
+    и возвращает путь к директории 'home' или корневой директории.
     """
-    if not zipfile.is_zipfile(zip_path):
-        raise ValueError("Указанный файл не является zip-архивом.")
-        
-    # Удаляем предыдущую директорию, если она существует
-    if os.path.exists(extract_to):
-        for root, dirs, files in os.walk(extract_to, topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
-                
-    # Распаковка архива
-    with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        zip_ref.extractall(extract_to)
-    return os.path.abspath(extract_to)
+    temp_dir = tempfile.mkdtemp()  # Создаем временную директорию
+
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(temp_dir)
+
+    # Проверяем, существует ли папка 'home' внутри распакованного содержимого
+    home_path = os.path.join(temp_dir, "home")
+    if os.path.exists(home_path) and os.path.isdir(home_path):
+        return home_path  # Возвращаем путь к 'home'
+
+    return temp_dir  # Если 'home' не существует, возвращаем корневую директорию
+

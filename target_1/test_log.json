@@ -6,16 +6,18 @@
             ".pytest_cache",
             "emulator.py",
             "filesystem.zip",
+            "fs_manager.py",
+            "home",
             "requirements.txt",
+            "session.json",
             "shell_commands.py",
+            "startup_script.txt",
             "tests",
             "test_log.json",
-            "Text Document.txt",
             "utils",
             "venv",
-            "vfs_temp",
             "__pycache__"
         ],
-        "timestamp": "2024-11-23T22:40:04.766637"
+        "timestamp": "2024-11-24T01:45:01.367989"
     }
 ]

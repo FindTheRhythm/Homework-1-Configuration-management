@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from shell_commands import Shell
 from utils.logger import Logger
 
-class TestCD(unittest.TestCase)::
+class TestCD(unittest.TestCase):
     def setUp(self):
         self.logger = Logger("test_log.json")
         self.test_dir = os.path.abspath("test_vfs")

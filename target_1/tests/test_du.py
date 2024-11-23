@@ -68,7 +68,7 @@ class TestDU(unittest.TestCase):
 
         # Проверяем логи
         log_entry = self.logger.logs[-1]
-        self.assertEqual(log_entry["command"], f"du .")
+        self.assertEqual(log_entry["command"], "du .")
         self.assertEqual(log_entry["result"], {"size": expected_size})
 
 

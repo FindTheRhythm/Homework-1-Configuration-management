@@ -13,7 +13,7 @@ class Logger:
             "timestamp": datetime.now().isoformat()
         }
         self.logs.append(entry)
-        
+
     def save(self):
         with open(self.logfile, "w") as log_file:
             json.dump(self.logs, log_file, indent=4)
