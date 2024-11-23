@@ -12,6 +12,7 @@ class Shell:
         self.hostname = hostname
         self.root_dir = root_dir  # Инициализация root_dir
         self.current_dir = root_dir  # Текущая директория по умолчанию — корень
+        self.previous_dir = None
         self.logger = logger
 
     def execute_command(self, command):
@@ -35,6 +36,8 @@ class Shell:
             return self.mv(args)
         elif cmd == "whoami":
             return self.whoami()
+        elif cmd == "pwd":
+            return self.pwd()
         else:
             print(f"Unknown command: {cmd}")
             return True
@@ -54,13 +57,36 @@ class Shell:
         if not args:
             print("Usage: cd <directory>")
             return True
+
+        if args[0] == "-":
+            # Возврат в предыдущую директорию
+            if self.previous_dir:
+                self.current_dir, self.previous_dir = self.previous_dir, self.current_dir
+                print(f"Changed to previous directory: {self.current_dir}")
+                self.logger.log("cd", f"Changed to previous directory: {self.current_dir}")
+            else:
+                print("No previous directory to return to.")
+                self.logger.log("cd", "No previous directory to return to.")
+            return True
+
         path = os.path.join(self.current_dir, args[0])
         if os.path.isdir(path):
+            self.previous_dir = self.current_dir  # Сохраняем текущую директорию
             self.current_dir = path
             self.logger.log("cd", f"Changed to {path}")
         else:
             print(f"No such directory: {args[0]}")
             self.logger.log("cd", f"No such directory: {args[0]}")
+        return True
+
+    def pwd(self):
+        """
+        Отображает текущую директорию.
+        """
+        relative_path = os.path.relpath(self.current_dir, self.root_dir)
+        relative_path = "/" if relative_path == "." else f"/{relative_path.replace(os.sep, '/')}"
+        print(relative_path)
+        self.logger.log("pwd", {"current_dir": relative_path})
         return True
 
     def du(self, path=None):
@@ -73,16 +99,12 @@ class Shell:
             if len(path) > 0:
                 path = path[0]  # Используем первый элемент
             else:
-                path = self.current_dir  # По умолчанию текущая директория
+                path = "."  # По умолчанию текущая директория
         elif path is None:
-            path = self.current_dir  # Если path не указан
-
-        # Проверка, что path имеет корректный тип
-        if not isinstance(path, str):
-            raise ValueError(f"Invalid path type: {type(path)}. Expected str.")
+            path = "."  # Если path не указан
 
         # Получение абсолютного пути
-        abs_path = os.path.join(self.root_dir, path)
+        abs_path = os.path.join(self.current_dir, path)
 
         # Проверка существования пути
         if not os.path.exists(abs_path):
