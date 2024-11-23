@@ -21,3 +21,22 @@ def main():
 
     # Инициализация оболочки
     shell = Shell(hostname=args.hostname, vfs_path=vfs_path, logger=logger)
+
+    # Выполнение стартового скрипта (если указан)
+    if args.script:
+        with open(args.script, "r") as script_file:
+            for command in script_file:
+                shell.execute_command(command.strip())
+
+    # Запуск CLI
+    while True:
+        try:
+            command = input(f"{args.hostname} > ")
+            if not shell.execute_command(command.strip()):
+                break
+        except KeyboardInterrupt:
+            print("\nExiting...")
+            break
+
+if __name__ == "__main__":
+    main()
