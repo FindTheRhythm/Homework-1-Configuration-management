@@ -67,7 +67,7 @@ pytest tests/
 
 ## Результат работы юнит-тестов
 
-![]()
+![unittests](https://github.com/SamurayGIF/Homework-1---Configuration-management/blob/28f91aedc74071fc265fd56044d4eb9fbfb92256/target_1/images/Screenshot%202024-11-23%20213150.png)
 
 ## Результат работы программы
 
