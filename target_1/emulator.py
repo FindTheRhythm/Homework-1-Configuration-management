@@ -18,23 +18,26 @@ def main():
     vfs_path = extract_zip(args.vfs)
 
     # Инициализация логгера
-    logger = Logger(args.logfile)
+    logger = Logger(logfile=args.logfile)
 
     # Инициализация оболочки
-    shell = Shell(hostname=args.hostname, vfs_path=vfs_path, logger=logger)
+    shell = Shell(hostname=args.hostname, root_dir=vfs_path, logger=logger)  # root_dir вместо vfs_path
 
     # Выполнение стартового скрипта (если указан)
     if args.script:
         with open(args.script, "r") as script_file:
             for command in script_file:
-                shell.execute_command(command.strip())
+                command = command.strip()
+                if command:
+                    shell.execute_command(command)
 
     # Запуск CLI
     while True:
         try:
-            command = input(f"{args.hostname} > ")
-            if not shell.execute_command(command.strip()):
-                break
+            command = input(f"{args.hostname}:{os.path.basename(shell.current_dir)}$ ").strip()
+            if command:
+                if not shell.execute_command(command):
+                    break
         except KeyboardInterrupt:
             print("\nExiting...")
             break
