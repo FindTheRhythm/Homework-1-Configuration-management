@@ -4,4 +4,3 @@ cd dir_test_2
 cd -
 whoami
 du
-exit

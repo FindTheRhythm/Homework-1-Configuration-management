@@ -5,33 +5,33 @@
             "dir_test_2",
             "vfs_test"
         ],
-        "timestamp": "2024-11-24T01:45:03.815095"
+        "timestamp": "2024-11-24T01:54:19.530731"
     },
     {
         "command": "cd",
         "result": "No such directory: subdir",
-        "timestamp": "2024-11-24T01:45:03.815095"
+        "timestamp": "2024-11-24T01:54:19.530731"
     },
     {
         "command": "cd",
-        "result": "Changed to C:\\Users\\dshur\\AppData\\Local\\Temp\\tmpm1lgtadw\\home\\dir_test_2",
-        "timestamp": "2024-11-24T01:45:03.815095"
+        "result": "Changed to C:\\Users\\dshur\\AppData\\Local\\Temp\\tmptyeputew\\home\\dir_test_2",
+        "timestamp": "2024-11-24T01:54:19.530731"
     },
     {
         "command": "cd",
-        "result": "Changed to previous directory: C:\\Users\\dshur\\AppData\\Local\\Temp\\tmpm1lgtadw\\home",
-        "timestamp": "2024-11-24T01:45:03.815095"
+        "result": "Changed to previous directory: C:\\Users\\dshur\\AppData\\Local\\Temp\\tmptyeputew\\home",
+        "timestamp": "2024-11-24T01:54:19.530731"
     },
     {
         "command": "whoami",
         "result": "dshur",
-        "timestamp": "2024-11-24T01:45:03.815095"
+        "timestamp": "2024-11-24T01:54:19.530731"
     },
     {
         "command": "du .",
         "result": {
             "size": 24
         },
-        "timestamp": "2024-11-24T01:45:03.815095"
+        "timestamp": "2024-11-24T01:54:19.530731"
     }
 ]
